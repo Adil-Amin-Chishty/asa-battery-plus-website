@@ -1,0 +1,18 @@
+node_modules/
+.npm-cache/
+.next/
+out/
+*.tsbuildinfo
+.env*
+
+.research/
+
+# Local tooling, deployment state and logs
+.vercel/
+.codex/
+.agents/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+!.env.example

@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.npm-cache/
+.research/
+package-lock.json
+next-env.d.ts
+AGENTS.md
+CLAUDE.md
