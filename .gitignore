@@ -9,6 +9,7 @@ out/
 
 # Local tooling, deployment state and logs
 .vercel/
+.netlify/
 .codex/
 .agents/
 coverage/
