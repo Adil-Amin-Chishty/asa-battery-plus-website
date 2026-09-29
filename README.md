@@ -42,6 +42,8 @@ This project includes `netlify.toml`. Netlify runs the Next.js server routes; a 
 
 Accounts and hosted credentials must be supplied by the owner; they are not created by the code. Hosted deployment has not been performed as part of this change. Free tiers have usage/storage limits and may pause service when limits are reached; they are not unlimited. Check [Netlify pricing](https://www.netlify.com/pricing/) and [Turso pricing](https://turso.tech/pricing) before launch. This configuration targets Netlify; Cloudflare Workers would require its own Next.js adapter and runtime/storage integration. Cloudflare can still manage the domain/DNS.
 
+To transfer an existing local catalog into an **empty** Turso database, stop the local dev server, set the Turso variables in `.env.local`, then run `node scripts/migrate-catalog.mjs`. The transfer includes brands, products, photos and catalog initialization settings. It leaves the local database unchanged and excludes login sessions. It refuses to overwrite a different hosted catalog; rerunning against an identical catalog is a no-op. After the transfer, start or deploy the app with the same Turso settings.
+
 Without Turso variables, development uses `storage/catalog.sqlite`. Local photos are stored inside that same database. For a persistent Node server, preserve this directory across deployments and back it up with a SQLite-aware backup tool or while the server is stopped. On Netlify/Vercel the app refuses to use local storage if remote database settings are missing. Use provider database exports/backups for hosted data. Restoring a database restores catalog records and photos together.
 
 ## Verification
