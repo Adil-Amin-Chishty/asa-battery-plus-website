@@ -5,4 +5,4 @@ export const brands = [
   "DAEWOO",
   "PHOENIX",
 ] as const;
-export type Brand = (typeof brands)[number];
+export type Brand = string;

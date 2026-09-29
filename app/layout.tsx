@@ -4,7 +4,7 @@ import { business } from "@/config/business";
 export const metadata: Metadata = {
   title: "ASA BATTERY PLUS | Car Batteries in Islamabad",
   description:
-    "Shop car batteries from Volta, Osaka, Fujika, Daewoo and Phoenix at ASA BATTERY PLUS in G-8 Markaz, Islamabad. Retail and wholesale inquiries available.",
+    "Shop car batteries from trusted brands at ASA BATTERY PLUS in G-8 Markaz, Islamabad. Retail and wholesale inquiries available.",
   openGraph: {
     title: "ASA BATTERY PLUS | Power you can depend on.",
     description:

@@ -14,5 +14,5 @@ export const business = {
   email: "",
   siteUrl: "", // Add the production origin before launch.
   about:
-    "ASA BATTERY PLUS specializes in car batteries in G-8 Markaz, Islamabad. We deal in Volta, Osaka, Fujika, Daewoo and Phoenix, helping drivers, workshops and wholesale buyers find suitable automotive batteries at competitive prices. Contact us for model guidance, the latest quotation and availability before visiting.",
+    "ASA BATTERY PLUS specializes in car batteries in G-8 Markaz, Islamabad. We help drivers, workshops and wholesale buyers find suitable automotive batteries from trusted brands at competitive prices. Contact us for model guidance, the latest quotation and availability before visiting.",
 };

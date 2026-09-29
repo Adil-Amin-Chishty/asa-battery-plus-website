@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+# Next.js runtime is automatically detected by Netlify.
+# Set TURSO_DATABASE_URL, TURSO_AUTH_TOKEN, ADMIN_EMAIL,
+# ADMIN_PASSWORD_HASH and APP_ORIGIN in the Netlify environment dashboard.

@@ -6,20 +6,32 @@
     "dev": "next dev --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "admin:setup": "node scripts/admin-setup.mjs",
+    "test:admin": "node scripts/test-admin.mjs",
+    "images:prepare": "node scripts/prepare-image-tools.mjs",
+    "predev": "npm run images:prepare",
+    "prebuild": "npm run images:prepare",
+    "test:images": "node scripts/test-images.mjs"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "lucide-react": "^0.468.0",
     "next": "^16.0.0",
+    "onnxruntime-web": "^1.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "lucide-react": "^0.468.0"
+    "sharp": "^0.35.4"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@types/node": "^22.0.0",
     "tailwindcss": "^4.0.0",
-    "@tailwindcss/postcss": "^4.0.0"
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

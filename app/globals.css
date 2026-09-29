@@ -417,14 +417,19 @@ h1 span,
 }
 .brand-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   margin-top: 26px;
   gap: 13px;
 }
 .brand-logo {
   position: relative;
   border: 1px solid var(--line);
-  height: 75px;
+  min-height: 75px;
+  height: auto;
+  min-width: 0;
+  padding: 12px;
+  overflow-wrap: anywhere;
+  text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
