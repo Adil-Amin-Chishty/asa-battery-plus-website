@@ -2,12 +2,27 @@
 
 Responsive Next.js, TypeScript and Tailwind CSS car-battery showroom with retail and wholesale WhatsApp inquiries and a private admin catalog manager. No checkout or customer accounts.
 
+## Live website
+
+- Storefront: [asa-battery-plus.netlify.app](https://asa-battery-plus.netlify.app)
+- Admin: [asa-battery-plus.netlify.app/admin](https://asa-battery-plus.netlify.app/admin)
+- Hosting: Netlify Free with the Next.js runtime; database: hosted Turso/libSQL.
+- The admin can be installed on a mobile home screen and opens in a standalone window.
+
+Launch was verified on **2 October 2026**: storefront, catalog API, uploaded photos and admin login page returned HTTP 200; the unauthenticated admin catalog API returned HTTP 401. The admin manifest and 192/512 px app icons also returned HTTP 200. A real credential sign-in and installation on a physical phone were not performed during that verification.
+
+See [Deployment and operations](docs/deployment.md) for hosting settings, troubleshooting, redeployment, backups and private configuration. GitHub stores source code and setup instructions; the live catalog and private credentials are maintained separately.
+
 ## Run
 
 Use Node.js 24 or newer. Run `npm install`, `npm run admin:setup`, then `npm run dev`. Open http://localhost:3000 and http://localhost:3000/admin.
 Production: `npm run build` then `npm start`.
 
 On Windows PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
+
+## Docker
+
+Build and run locally with Docker Engine: `docker compose up --build -d`, then open http://localhost:3000. Compose reads `.env.local` at runtime and keeps local SQLite data in a persistent Docker volume. The image excludes local environment files and database files. For a hosted Docker platform, build from the repository root, expose the assigned `PORT` (default 3000), and configure `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD_HASH` as runtime environment variables. Set `APP_ORIGIN` to the public HTTPS origin when using a fixed domain. The image build prepares photo-processing assets; it does not connect to or migrate a Turso database.
 
 ## Admin panel
 
@@ -21,13 +36,24 @@ The one-time setup command prompts for an email and password (12+ characters), t
 
 The existing catalog is seeded **once** into a new database. Removing all products/brands does not re-create them on restart. The `data/*.ts` files are seed data, not the live catalog. Normal catalog changes never require source edits or a redeploy.
 
+### Install the admin web app
+
+Open the [admin URL](https://asa-battery-plus.netlify.app/admin) on your phone:
+
+- **Android / Chrome:** menu → **Add to Home screen** → **Install**, if offered.
+- **iPhone / Safari:** Share → **Add to Home Screen** → enable **Open as Web App**, if shown → Add.
+
+Open **ASA Admin** from the home screen and sign in using the existing owner's credentials. Browser labels vary by version. The manifest launches `/admin` in standalone mode, with Android icons and an Apple touch icon. Internet access is required for catalog operations and photo uploads; offline editing, push notifications and an app-store package are not implemented. Installation does not remove the admin login requirement.
+
+Installation files: `public/admin/app.webmanifest`, `public/admin/*.png` and metadata in `app/admin/layout.tsx`. To update the app branding, keep the icon dimensions consistent with the manifest and redeploy.
+
 ## Free-tier deployment: Netlify + Turso
 
 This project includes `netlify.toml`. Netlify runs the Next.js server routes; a hosted **libSQL** database in Turso stores brands, products, compressed photos, sessions and login limits. This avoids saving uploads to temporary serverless disks. Select a libSQL-compatible database when creating the Turso database (`@libsql/client` is used).
 
 1. Create a Turso libSQL database and obtain its database URL and authentication token. Use a separate database for preview/test deployments.
 2. Run `npm run admin:setup` locally to choose the owner's login.
-3. Import this repository in Netlify. Use build command `npm run build`, publish directory `.next`, and Node 24. Netlify detects the Next.js runtime automatically.
+3. Import this repository in Netlify. Use build command `npm run build`, publish directory `.next`, and Node 24. In **Project configuration → Developer settings → Build settings**, explicitly confirm **Runtime: Next.js**. A successful build without this runtime can publish `.next` as static files and return 404 for the website and API routes.
 4. Set the following environment variables in Netlify for builds and functions. Keep them private; none use a `NEXT_PUBLIC_` prefix.
 
 | Variable | Value |
@@ -38,9 +64,10 @@ This project includes `netlify.toml`. Netlify runs the Next.js server routes; a 
 | `ADMIN_PASSWORD_HASH` | Full salted hash from `.env.local` |
 | `APP_ORIGIN` | Exact public HTTPS origin, e.g. `https://your-shop.netlify.app`, without a trailing slash |
 
-5. Deploy, open `/admin`, sign in and update a battery. Reload the website to verify the live change. If using a custom domain, update `APP_ORIGIN` to that domain and redeploy.
+5. In **Project configuration → General → Visitor access → Project visibility**, make production **Public**. The current project keeps deploy previews private. A private production project returns a Netlify login/401 response before the application loads.
+6. Deploy, open `/admin`, sign in and update a battery. Reload the website to verify the live change. If using a custom domain, update `APP_ORIGIN` to that domain and redeploy.
 
-Accounts and hosted credentials must be supplied by the owner; they are not created by the code. Hosted deployment has not been performed as part of this change. Free tiers have usage/storage limits and may pause service when limits are reached; they are not unlimited. Check [Netlify pricing](https://www.netlify.com/pricing/) and [Turso pricing](https://turso.tech/pricing) before launch. This configuration targets Netlify; Cloudflare Workers would require its own Next.js adapter and runtime/storage integration. Cloudflare can still manage the domain/DNS.
+The website has been deployed to Netlify with Turso. Accounts and hosted credentials are owner-managed; they are not created by the code. Free tiers have usage/storage limits and may pause service when limits are reached; they are not unlimited. Check [Netlify pricing](https://www.netlify.com/pricing/) and [Turso pricing](https://turso.tech/pricing) for current limits. Netlify supports commercial projects on its Free plan; [Vercel Hobby](https://vercel.com/docs/plans/hobby) is restricted to personal, non-commercial use, so this shop uses Netlify. Cloudflare Workers would require its own Next.js adapter and runtime/storage integration. Cloudflare can still manage the domain/DNS.
 
 To transfer an existing local catalog into an **empty** Turso database, stop the local dev server, set the Turso variables in `.env.local`, then run `node scripts/migrate-catalog.mjs`. The transfer includes brands, products, photos and catalog initialization settings. It leaves the local database unchanged and excludes login sessions. It refuses to overwrite a different hosted catalog; rerunning against an identical catalog is a no-op. After the transfer, start or deploy the app with the same Turso settings.
 
